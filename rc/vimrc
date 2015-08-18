@@ -40,6 +40,7 @@ Bundle 'tpope/vim-haml'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'vim-scripts/VimClojure'
 Bundle 'Keithbsmiley/rspec.vim'
+Bundle 'tikhomirov/vim-glsl'
 Bundle 'elixir-lang/vim-elixir'
 "
 " " Other
@@ -47,8 +48,9 @@ Bundle 'csexton/trailertrash.vim'
 " Bundle 'edsono/vim-matchit'
 Bundle 'godlygeek/tabular'
 " Bundle 'kana/vim-textobj-user'
-" Bundle 'kien/ctrlp.vim'
-Bundle 'mileszs/ack.vim'
+Bundle 'kien/ctrlp.vim'
+" Bundle 'mileszs/ack.vim'
+Bundle 'rking/ag.vim'
 " Bundle 'nelstrom/vim-textobj-rubyblock'
 " Bundle 'nelstrom/vim-visual-star-search'
 Bundle 'tomtom/tcomment_vim'
@@ -60,6 +62,7 @@ Bundle 'tpope/vim-sensible'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-vinegar'
 " Bundle 'vim-scripts/bufexplorer.zip'
+Bundle 'jlanzarotta/bufexplorer'
 " " Bundle 'eiginn/netrw'
 Bundle 'michaeljsmith/vim-indent-object'
 " " Bundle 'gavinbeatty/dragvisuals.vim'
@@ -202,8 +205,11 @@ call matchadd('ColorColumn', '\%81v', 100)
 nnoremap <space> :
 vnoremap <space> :
 
+
+nnoremap <C-s> <C-^>
+
 " Buffer Explorer opens with Ctrl+B
-nnoremap <C-B> :BufExplorer<cr>
+nnoremap <C-B> :CtrlPBuffer<cr>
 
 " %% will become the directory of the current file
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
@@ -243,6 +249,7 @@ map <Leader>r :w<cr>:call RunAllSpecs()<cr>
 " Custom functions
 map <leader>p :call PromoteToLet()<cr>
 
+
 " Align = signs
 nmap <Leader>a= :Tabularize /=<cr>
 vmap <Leader>a= :Tabularize /=<cr>gv
@@ -273,8 +280,7 @@ map <Leader><Leader>u :Git up<cr>
 
 " Open notes file
 map <Leader>q :split ~/Dropbox/notes.md<cr>
-
-
+map <Leader><Leader>q :call MakeSession()<cr>:qa<cr>
 
 " ==========================
 " FUNCTIONS
@@ -289,6 +295,26 @@ function! InsertTabWrapper()
     return "\<c-p>"
   endif
 endfunction
+
+function! MakeSession()
+  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  if (filewritable(b:sessiondir) != 2)
+    exe 'silent !mkdir -p ' b:sessiondir
+    redraw!
+  endif
+  let b:filename = b:sessiondir . '/session.vim'
+  exe "mksession! " . b:filename
+endfunction
+
+function! LoadSession()
+  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  let b:sessionfile = b:sessiondir . "/session.vim"
+  if (filereadable(b:sessionfile))
+    exe 'silent! source ' b:sessionfile
+  endif
+endfunction
+
+:call LoadSession()
 
 " Convert local variable to RSpec let block
 function! PromoteToLet()
