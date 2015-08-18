@@ -280,7 +280,6 @@ map <Leader><Leader>u :Git up<cr>
 
 " Open notes file
 map <Leader>q :split ~/Dropbox/notes.md<cr>
-map <Leader><Leader>q :call MakeSession()<cr>:qa<cr>
 
 " ==========================
 " FUNCTIONS
@@ -314,7 +313,9 @@ function! LoadSession()
   endif
 endfunction
 
-:call LoadSession()
+map <Leader><Leader>q :call MakeSession()<cr>:qa<cr>
+map <Leader><Leader>e :call LoadSession()<cr>
+" :call LoadSession()
 
 " Convert local variable to RSpec let block
 function! PromoteToLet()
