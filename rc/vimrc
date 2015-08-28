@@ -210,6 +210,7 @@ nnoremap <C-s> <C-^>
 
 " Buffer Explorer opens with Ctrl+B
 nnoremap <C-B> :CtrlPBuffer<cr>
+nnoremap <C-F> :CtrlP<cr>
 
 " %% will become the directory of the current file
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
